@@ -1,0 +1,38 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: express-google-oauth2-service
+spec:
+  selector:
+    app: express-google-oauth2
+  ports:
+    - protocol: 'TCP'
+      port: 5000
+      targetPort: 5000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: express-google-oauth2-deployment
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: express-google-oauth2
+  template:
+    metadata:
+      labels:
+        app: express-google-oauth2
+    spec:
+      containers:
+        - name: express-google-oauth2
+          image: jhonatan98rios/express-google-oauth2
+          resources:
+            limits:
+              memory: 256Mi
+              cpu: "0.5"
+            requests:
+              memory: 128Mi
+              cpu: "0.1"
